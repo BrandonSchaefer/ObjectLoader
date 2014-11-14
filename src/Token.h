@@ -24,10 +24,27 @@
 class Token
 {
 public:
+  enum class Type : unsigned int
+  {
+    LITERAL,
+    VERTEX,
+    VERTEX_T,
+    VERTEX_N,
+    FACE,
+    Size
+  };
+
   Token();
 
+  void SetType(Type const& type);
+  void SetFloat(float value);
+
+  Type GetType() const;
+  float GetFloat() const;
+
 private:
-  std::string token_;
+  float value_;
+  Type type_;
 };
 
 #endif // TOKEN_H

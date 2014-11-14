@@ -16,30 +16,18 @@
 * Authored by: Brandon Schaefer <brandontschaefer@gmail.com>
 */
 
-#include "Token.h"
+#ifndef VERTEX_H
+#define VERTEX_H
 
-Token::Token()
-  : value_(0.0f)
-  , type_(Token::Type::LITERAL)
+class Vertex
 {
-}
+public:
+  Vertex();
+  Vertex(float x_, float y_, float z_);
 
-void Token::SetType(Type const& type)
-{
-  type_ = type;
-}
+  float x;
+  float y;
+  float z;
+};
 
-void Token::SetFloat(float value)
-{
-  value_ = value;
-}
-
-Token::Type Token::GetType() const
-{
-  return type_;
-}
-
-float Token::GetFloat() const
-{
-  return value_;
-}
+#endif // VERTEX_H

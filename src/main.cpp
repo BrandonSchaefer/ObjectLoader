@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <stdexcept>
 #include <vector>
+
+#include "Obj.h"
+#include "ObjLexer.h"
 
 std::string ReadInFile(char const* path)
 {
@@ -28,23 +29,8 @@ std::string ReadInFile(char const* path)
   return str;
 }
 
-template<typename T>
-T StringToNumber(std::string const& str)
-{
-  T num;
-
-  std::stringstream ss(str);
-  ss >> num;
-
-  if (ss.fail())
-  {
-    std::runtime_error e(str);
-    throw e;
-  }
-
-  return num;
-}
-
 int main()
 {
+  std::string raw_object = ReadInFile("teapot.obj");
+  Obj obj(raw_object);
 }

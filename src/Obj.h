@@ -16,30 +16,29 @@
 * Authored by: Brandon Schaefer <brandontschaefer@gmail.com>
 */
 
-#include "Token.h"
+#ifndef OBJ_H
+#define OBJ_H
 
-Token::Token()
-  : value_(0.0f)
-  , type_(Token::Type::LITERAL)
-{
-}
+#include <string>
+#include <vector>
 
-void Token::SetType(Type const& type)
-{
-  type_ = type;
-}
+#include "ObjLexer.h"
+#include "Face.h"
+#include "Vertex.h"
 
-void Token::SetFloat(float value)
+class Obj
 {
-  value_ = value;
-}
+public:
+  Obj(std::string const& path);
 
-Token::Type Token::GetType() const
-{
-  return type_;
-}
+private:
+  void AddFace(ObjLexer& lexer);
 
-float Token::GetFloat() const
-{
-  return value_;
-}
+  std::vector<Vertex> vs_;
+  std::vector<Vertex> vts_;
+  std::vector<Vertex> vns_;
+  std::vector<Face>   faces_;
+
+};
+
+#endif // OBJ_H

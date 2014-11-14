@@ -16,30 +16,20 @@
 * Authored by: Brandon Schaefer <brandontschaefer@gmail.com>
 */
 
-#include "Token.h"
+#ifndef FACE_H
+#define FACE_H
 
-Token::Token()
-  : value_(0.0f)
-  , type_(Token::Type::LITERAL)
-{
-}
+#include "Vertex.h"
 
-void Token::SetType(Type const& type)
+class Face
 {
-  type_ = type;
-}
+public:
+  Face();
+  Face(Vertex const& v1, Vertex const& v2, Vertex const& v3);
 
-void Token::SetFloat(float value)
-{
-  value_ = value;
-}
+  Vertex v1;
+  Vertex v2;
+  Vertex v3;
+};
 
-Token::Type Token::GetType() const
-{
-  return type_;
-}
-
-float Token::GetFloat() const
-{
-  return value_;
-}
+#endif // FACE_H

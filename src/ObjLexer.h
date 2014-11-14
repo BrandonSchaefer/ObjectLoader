@@ -19,12 +19,21 @@
 #ifndef OBJ_LEXER_H
 #define OBJ_LEXER_H
 
+#include <queue>
+#include "Token.h"
+
 class ObjLexer
 {
 public:
-  ObjLexer();
+  ObjLexer(std::string const& raw_object);
+
+  bool HasNextToken() const;
+  Token NextToken();
 
 private:
+  int AddNewToken(Token::Type const& type, int i, std::string const& raw_object);
+
+  std::queue<Token> tokens_;
 };
 
 #endif // OBJ_LEXER_H
