@@ -18,6 +18,9 @@
 
 #include "Face.h"
 
+namespace obj_loader
+{
+
 Face::Face()
 {
 }
@@ -28,3 +31,5 @@ Face::Face(Vertex const& v1_, Vertex const& v2_, Vertex const& v3_)
   , v3(v3_)
 {
 }
+
+} // namespace obj_loader

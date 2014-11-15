@@ -36,6 +36,9 @@ f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
 
 */
 
+namespace obj_loader
+{
+
 bool isDigit(char const c)
 {
   return (c >= '0' && c <= '9');
@@ -171,3 +174,5 @@ Token ObjLexer::NextToken()
 
   return token;
 }
+
+} // namespace obj_loader

@@ -26,6 +26,9 @@
 #include "Face.h"
 #include "Vertex.h"
 
+namespace obj_loader
+{
+
 class Obj
 {
 public:
@@ -40,5 +43,7 @@ private:
   std::vector<Face>   faces_;
 
 };
+
+} // namespace obj_loader
 
 #endif // OBJ_H

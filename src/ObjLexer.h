@@ -22,6 +22,9 @@
 #include <queue>
 #include "Token.h"
 
+namespace obj_loader
+{
+
 class ObjLexer
 {
 public:
@@ -35,5 +38,7 @@ private:
 
   std::queue<Token> tokens_;
 };
+
+} // namespace obj_loader
 
 #endif // OBJ_LEXER_H

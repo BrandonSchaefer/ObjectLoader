@@ -21,6 +21,9 @@
 
 #include "Vertex.h"
 
+namespace obj_loader
+{
+
 class Face
 {
 public:
@@ -31,5 +34,7 @@ public:
   Vertex v2;
   Vertex v3;
 };
+
+} // namespace obj_loader
 
 #endif // FACE_H

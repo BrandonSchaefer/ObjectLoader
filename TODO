@@ -1,4 +1,4 @@
-* GLFW3 as the backend rendering
+* SDL2 as the backend rendering
 * Load in Obj vertices
   - Tokenize the fiile
   - Create an Obj class which holds the v/vt/vn and faces

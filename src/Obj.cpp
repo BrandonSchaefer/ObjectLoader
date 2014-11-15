@@ -19,6 +19,9 @@
 #include "Obj.h"
 #include "Token.h"
 
+namespace obj_loader
+{
+
 void AddVertex(ObjLexer& lexer, std::vector<Vertex>& vertex_list)
 {
   Token p1 = lexer.NextToken();
@@ -82,3 +85,5 @@ Obj::Obj(std::string const& raw_object)
     }
   }
 }
+
+} // namespace obj_loader

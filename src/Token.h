@@ -21,6 +21,9 @@
 
 #include <string>
 
+namespace obj_loader
+{
+
 class Token
 {
 public:
@@ -46,5 +49,7 @@ private:
   float value_;
   Type type_;
 };
+
+} // namespace obj_loader
 
 #endif // TOKEN_H

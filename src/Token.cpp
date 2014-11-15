@@ -18,6 +18,9 @@
 
 #include "Token.h"
 
+namespace obj_loader
+{
+
 Token::Token()
   : value_(0.0f)
   , type_(Token::Type::LITERAL)
@@ -43,3 +46,5 @@ float Token::GetFloat() const
 {
   return value_;
 }
+
+} // namespace obj_loader

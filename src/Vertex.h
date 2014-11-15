@@ -19,6 +19,9 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+namespace obj_loader
+{
+
 class Vertex
 {
 public:
@@ -29,5 +32,7 @@ public:
   float y;
   float z;
 };
+
+} // namespace obj_loader
 
 #endif // VERTEX_H

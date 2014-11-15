@@ -18,6 +18,9 @@
 
 #include "Vertex.h"
 
+namespace obj_loader
+{
+
 Vertex::Vertex()
   : x(0.0f)
   , y(0.0f)
@@ -31,3 +34,5 @@ Vertex::Vertex(float x_, float y_, float z_)
   , z(z_)
 {
 }
+
+} // namespace obj_loader
