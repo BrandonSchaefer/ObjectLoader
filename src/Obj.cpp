@@ -22,14 +22,63 @@
 namespace obj_loader
 {
 
-void AddVertex(ObjLexer& lexer, std::vector<Vertex>& vertex_list)
+void Obj::AddVertex(ObjLexer& lexer, std::vector<Vertex>& vertex_list)
 {
-  Token p1 = lexer.NextToken();
-  Token p2 = lexer.NextToken();
-  Token p3 = lexer.NextToken();
+  float p1 = lexer.NextToken().GetFloat();
+  float p2 = lexer.NextToken().GetFloat();
+  float p3 = lexer.NextToken().GetFloat();
 
-  Vertex v(p1.GetFloat(), p2.GetFloat(), p3.GetFloat());
+  if (p1 > max_vertex_)
+    max_vertex_ = p1;
+
+  if (p2 > max_vertex_)
+    max_vertex_ = p2;
+
+  if (p3 > max_vertex_)
+    max_vertex_ = p3;
+
+  Vertex v(p1, p2, p3);
   vertex_list.push_back(v);
+}
+
+int Obj::NumOfFaces() const
+{
+  return faces_.size();
+}
+
+float Obj::MaxVertex() const
+{
+  return max_vertex_;
+}
+
+GLfloat* Obj::RawFaces() const
+{
+  return raw_faces_;
+}
+
+void Obj::GenerateRawFaces()
+{
+  int num_faces = (int)faces_.size();
+  int new_i = 0;
+  raw_faces_ = (GLfloat*)calloc(1, sizeof(GLfloat) * num_faces * 9);
+
+  for (int i = 0; i < num_faces; i++)
+  {
+    Face face = faces_[i];
+
+    new_i = i * 9;
+    raw_faces_[0 + new_i] = face.v1.x;
+    raw_faces_[1 + new_i] = face.v1.y;
+    raw_faces_[2 + new_i] = face.v1.z;
+
+    raw_faces_[3 + new_i] = face.v2.x;
+    raw_faces_[4 + new_i] = face.v2.y;
+    raw_faces_[5 + new_i] = face.v2.z;
+
+    raw_faces_[6 + new_i] = face.v3.x;
+    raw_faces_[7 + new_i] = face.v3.y;
+    raw_faces_[8 + new_i] = face.v3.z;
+  }
 }
 
 void Obj::AddFace(ObjLexer& lexer)
@@ -60,6 +109,8 @@ void Obj::AddFace(ObjLexer& lexer)
 }
 
 Obj::Obj(std::string const& raw_object)
+  : raw_faces_(nullptr)
+  , max_vertex_(0.0f)
 {
   ObjLexer lexer(raw_object);
 
@@ -84,6 +135,13 @@ Obj::Obj(std::string const& raw_object)
        break;
     }
   }
+
+  GenerateRawFaces();
+}
+
+Obj::~Obj()
+{
+  free(raw_faces_);
 }
 
 } // namespace obj_loader

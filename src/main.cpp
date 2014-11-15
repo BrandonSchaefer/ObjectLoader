@@ -185,17 +185,20 @@ int main()
   GLint attr_color    = glGetAttribLocation(program, "a_color");
   GLint attr_mvp      = glGetUniformLocation(program, "u_mvp");
 
-
+  float max_vertex = obj.MaxVertex();
+  printf("%lf\n", max_vertex);
+/*
   GLfloat vVertices[] = { 1.0f,  1.0f, 0.0f,
                           1.0f, -1.0f, 0.0f,
                          -1.0f, -1.0f, 0.0f,
                          -1.0f,  1.0f, 0.0f,
                           1.0f,  1.0f, 0.0f,
                          -1.0f, -1.0f, 0.0f };
+                         */
 
   GL_CHECK(glEnableVertexAttribArray(attr_position));
 
-  GL_CHECK(glVertexAttribPointer(attr_position, 3, GL_FLOAT, GL_FALSE, 0, vVertices));
+  GL_CHECK(glVertexAttribPointer(attr_position, 3, GL_FLOAT, GL_FALSE, 0, obj.RawFaces()));
 
   GLfloat color[4] = {1.0, 0.0f, 0.0f, 1.0f};
   GL_CHECK(glVertexAttrib4fv(attr_color, color));
@@ -205,9 +208,14 @@ int main()
 
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-  float difference = 10.0f;
-  
   // TODO CLEAN THIS UP :) Proof of conecpt
+  float angle_x    = 50.0f;
+  float angle_y    = 50.0f;
+  bool x_down_w = false;
+  bool x_down_s = false;
+  bool y_down_a = false;
+  bool y_down_d = false;
+
   while (!done)
   {
     fps.start();
@@ -220,9 +228,45 @@ int main()
         case SDL_KEYDOWN:
         {
           if (event.key.keysym.sym == SDLK_w)
-            difference -= 0.5f;
+          {
+            x_down_w = true;
+          }
           else if (event.key.keysym.sym == SDLK_s)
-            difference += 0.5f;
+          {
+            x_down_s = true;
+          }
+          else if (event.key.keysym.sym == SDLK_a)
+          {
+            y_down_a = true;
+          }
+          else if (event.key.keysym.sym == SDLK_d)
+          {
+            y_down_d = true;
+          }
+        }
+          break;
+        case SDL_KEYUP:
+        {
+          if (event.key.keysym.sym == SDLK_w)
+          {
+            x_down_w = false;
+          }
+          else if (event.key.keysym.sym == SDLK_s)
+          {
+            x_down_s = false;
+          }
+          else if (event.key.keysym.sym == SDLK_a)
+          {
+            y_down_a = false;
+          }
+          else if (event.key.keysym.sym == SDLK_d)
+          {
+            y_down_d = false;
+          }
+          else if (event.key.keysym.sym == SDLK_ESCAPE)
+          {
+            done = true;
+          }
         }
           break;
         case SDL_QUIT:
@@ -232,11 +276,29 @@ int main()
       }
     }
 
+    if (x_down_w)
+    {
+      angle_x -= 1.0f;
+    }
+    if(x_down_s)
+    {
+      angle_x += 1.0f;
+    }
+
+    if (y_down_a)
+    {
+      angle_y -= 1.0f;
+    }
+    if (y_down_d)
+    {
+      angle_y += 1.0f;
+    }
+
     // Render function
     matrix::Matrix4x4 mat_rot, mat_persp, mat_model, mat_mvp;
 
-    mat_model.Rotate(50, 1.0f, 0.0f, 0.0f);
-    mat_rot.Rotate  (50, 0.0f, 1.0f, 0.0f);
+    mat_model.Rotate(angle_x, 1.0f, 0.0f, 0.0f);
+    mat_rot.Rotate  (angle_y, 0.0f, 1.0f, 0.0f);
 
     mat_model = mat_model * mat_rot;
 
@@ -245,15 +307,15 @@ int main()
     mat_model = mat_model * mat_rot;
 
     /* Pull the camera back from the cube */
-    mat_model.matrix_.m[3][2] -= difference;
+    mat_model.matrix_.m[3][2] -= (max_vertex * 2);
 
-    mat_persp.Perspective(45.0f, (float)WIDTH/HEIGHT, 0.01, 200.0f);
+    mat_persp.Perspective(45.0f, (float)WIDTH/HEIGHT, 0.01, (max_vertex * 3));
     mat_mvp = mat_model * mat_persp;
 
     GL_CHECK(glUniformMatrix4fv(attr_mvp, 1, GL_FALSE, (GLfloat*)mat_mvp.GetGLMatrix().m));
 
     GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, 6));
+    GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, obj.NumOfFaces() * 3));
 
     // End of render
 
@@ -264,4 +326,7 @@ int main()
   }
 
   SDL_GL_DeleteContext(context);
+  SDL_DestroyWindow(window);
+
+  SDL_Quit();
 }

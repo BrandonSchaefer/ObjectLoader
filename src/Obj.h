@@ -26,6 +26,8 @@
 #include "Face.h"
 #include "Vertex.h"
 
+#include <GLES2/gl2.h>
+
 namespace obj_loader
 {
 
@@ -33,15 +35,25 @@ class Obj
 {
 public:
   Obj(std::string const& path);
+  ~Obj();
+
+  float MaxVertex() const;
+
+  int NumOfFaces() const;
+  GLfloat* RawFaces() const;
 
 private:
+  void AddVertex(ObjLexer& lexer, std::vector<Vertex>& vertex_list);
   void AddFace(ObjLexer& lexer);
+
+  void GenerateRawFaces();
 
   std::vector<Vertex> vs_;
   std::vector<Vertex> vts_;
   std::vector<Vertex> vns_;
   std::vector<Face>   faces_;
-
+  GLfloat* raw_faces_;
+  float max_vertex_;
 };
 
 } // namespace obj_loader
