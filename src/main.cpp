@@ -186,7 +186,6 @@ int main()
   GLint attr_mvp      = glGetUniformLocation(program, "u_mvp");
 
   float max_vertex = obj.MaxVertex();
-  printf("%lf\n", max_vertex);
 
   GL_CHECK(glEnableVertexAttribArray(attr_position));
 
@@ -201,7 +200,7 @@ int main()
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
   // TODO CLEAN THIS UP :) Proof of conecpt
-  float angle_x    = 50.0f;
+  float angle_x    = 0.0f;
   float angle_y    = 50.0f;
   float zoom_diff  = 0.0f;
   bool x_down_w = false;
