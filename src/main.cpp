@@ -187,14 +187,6 @@ int main()
 
   float max_vertex = obj.MaxVertex();
   printf("%lf\n", max_vertex);
-/*
-  GLfloat vVertices[] = { 1.0f,  1.0f, 0.0f,
-                          1.0f, -1.0f, 0.0f,
-                         -1.0f, -1.0f, 0.0f,
-                         -1.0f,  1.0f, 0.0f,
-                          1.0f,  1.0f, 0.0f,
-                         -1.0f, -1.0f, 0.0f };
-                         */
 
   GL_CHECK(glEnableVertexAttribArray(attr_position));
 
@@ -211,10 +203,13 @@ int main()
   // TODO CLEAN THIS UP :) Proof of conecpt
   float angle_x    = 50.0f;
   float angle_y    = 50.0f;
+  float zoom_diff  = 0.0f;
   bool x_down_w = false;
   bool x_down_s = false;
   bool y_down_a = false;
   bool y_down_d = false;
+  bool zoom_in  = false;
+  bool zoom_out = false;
 
   while (!done)
   {
@@ -243,6 +238,14 @@ int main()
           {
             y_down_d = true;
           }
+          else if (event.key.keysym.sym == SDLK_UP)
+          {
+            zoom_in = true;
+          }
+          else if (event.key.keysym.sym == SDLK_DOWN)
+          {
+            zoom_out = true;
+          }
         }
           break;
         case SDL_KEYUP:
@@ -262,6 +265,14 @@ int main()
           else if (event.key.keysym.sym == SDLK_d)
           {
             y_down_d = false;
+          }
+          else if (event.key.keysym.sym == SDLK_UP)
+          {
+            zoom_in = false;
+          }
+          else if (event.key.keysym.sym == SDLK_DOWN)
+          {
+            zoom_out = false;
           }
           else if (event.key.keysym.sym == SDLK_ESCAPE)
           {
@@ -294,6 +305,15 @@ int main()
       angle_y += 1.0f;
     }
 
+    if (zoom_in)
+    {
+      zoom_diff -= 2.0f;
+    }
+    if (zoom_out)
+    {
+      zoom_diff += 2.0f;
+    }
+
     // Render function
     matrix::Matrix4x4 mat_rot, mat_persp, mat_model, mat_mvp;
 
@@ -307,10 +327,12 @@ int main()
     mat_model = mat_model * mat_rot;
 
     /* Pull the camera back from the cube */
-    mat_model.matrix_.m[3][2] -= (max_vertex * 2);
+    mat_model.matrix_.m[3][2] -= (max_vertex * 2) + zoom_diff;
 
-    mat_persp.Perspective(45.0f, (float)WIDTH/HEIGHT, 0.01, (max_vertex * 3));
+    mat_persp.Perspective(45.0f, (float)WIDTH/HEIGHT, 0.01, 500);
     mat_mvp = mat_model * mat_persp;
+
+    mat_mvp.Scale(0.3, 0.3, 0.3);
 
     GL_CHECK(glUniformMatrix4fv(attr_mvp, 1, GL_FALSE, (GLfloat*)mat_mvp.GetGLMatrix().m));
 
